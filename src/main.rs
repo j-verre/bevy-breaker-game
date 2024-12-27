@@ -2,7 +2,11 @@ mod resources;
 mod systems;
 
 use bevy::prelude::*;
-use systems::{audio::play_background_music, initialize, ui::create_paddle};
+use systems::{
+    audio::{play_background_music, play_sfx},
+    initialize,
+    ui::create_paddle,
+};
 
 fn main() {
     App::new()
@@ -15,6 +19,6 @@ fn main() {
         }))
         .add_systems(Startup, initialize)
         .add_systems(Startup, create_paddle)
-        .add_systems(PostStartup, play_background_music)
+        .add_systems(PostStartup, (play_background_music, play_sfx))
         .run();
 }

@@ -13,14 +13,16 @@ pub mod audio {
 
     pub fn play_background_music(asset_server: Res<AssetServer>, mut commands: Commands) {
         commands.spawn((
-            AudioPlayer::new(asset_server.load("audio/music_loop.ogg")),
+            AudioPlayer::new(asset_server.load("audio/music/elevator_music.ogg")),
             PlaybackSettings::LOOP,
         ));
     }
 
-    #[allow(dead_code)]
-    pub fn play_sfx(_asset_server: Res<AssetServer>, mut _commands: Commands) {
-        todo!()
+    pub fn play_sfx(asset_server: Res<AssetServer>, mut commands: Commands) {
+        commands.spawn((
+            AudioPlayer::new(asset_server.load("audio/sfx/digital-two-tone.wav")),
+            PlaybackSettings::ONCE,
+        ));
     }
 }
 
