@@ -1,11 +1,12 @@
-mod resources;
+mod scoring;
+mod state;
 mod systems;
 
 use bevy::prelude::*;
+use scoring::{init_scoreboard, update_score, Score};
 use systems::{
-    audio::{play_background_music, play_sfx},
-    initialize,
-    ui::create_paddle,
+    setup,
+    ui::{init_paddle, Paddle},
 };
 
 fn main() {
@@ -17,8 +18,22 @@ fn main() {
             }),
             ..default()
         }))
-        .add_systems(Startup, initialize)
-        .add_systems(Startup, create_paddle)
-        .add_systems(PostStartup, (play_background_music, play_sfx))
+        .insert_resource(Score::new())
+        .add_systems(Startup, setup)
+        .add_systems(Startup, (init_paddle, init_scoreboard))
+        .add_systems(Update, (move_paddle, update_score))
         .run();
+}
+
+fn move_paddle(
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    mut transform: Single<&mut Transform, With<Paddle>>,
+) {
+    if keyboard_input.pressed(KeyCode::ArrowRight) {
+        println!("-> pressed!");
+        transform.translation.x += 10.0;
+    } else if keyboard_input.pressed(KeyCode::ArrowLeft) {
+        println!("<- pressed!");
+        transform.translation.x -= 10.0;
+    }
 }
